@@ -4,6 +4,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.layout.GridPane?>
 
 <?import javafx.collections.FXCollections?>
@@ -22,8 +23,11 @@
           AnchorPane.rightAnchor="0.0">
 
         <HBox alignment="CENTER" spacing="20.0">
-        <TableView fx:id="ingredientsTable" prefHeight="200" prefWidth="200"
-                   style="-fx-background-color: #333333; -fx-text-fill: white;"/>
+        <TableView fx:id="ingredientsTable" prefHeight="300" prefWidth="250" style="-fx-background-color: #333333; -fx-text-fill: white;">
+            <columns>
+                <TableColumn fx:id="Recipe" text="Recipe" prefWidth="200"/>
+            </columns>
+        </TableView>
         </HBox>
     </VBox>
 

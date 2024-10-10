@@ -16,6 +16,9 @@
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/cab302_project/IngredientTrackerApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/cab302_project/IngredientTrackerApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/cab302_project/IngredientsDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/cab302_project/IngredientsDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test_database.db" beforeDir="false" afterPath="$PROJECT_DIR$/test_database.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/cab302_project/RecipeDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/cab302_project/RecipeDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/cab302_project/RecommendRecipeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/cab302_project/RecommendRecipeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/cab302_project/recommend-recipe-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/cab302_project/recommend-recipe-view.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,6 +51,7 @@
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/KyleReeves/CAB302_Group_Project.git&quot;,
     &quot;accountId&quot;: &quot;c619c9ff-cb5b-4a7f-b78e-754e7fdf874c&quot;
+    &quot;accountId&quot;: &quot;246e87cf-9350-4d4b-8937-892cb9ce6cae&quot;
   }
 }</component>
   <component name="MavenImportPreferences">
