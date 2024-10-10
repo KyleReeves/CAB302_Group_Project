@@ -12,7 +12,7 @@
   </padding>
 
   <!-- Title for Menu -->
-  <Label text="Ingredient Tracker" styleClass="title-label" style=" -fx-padding: 50;" />
+  <Label text="Ingredient Tracker" styleClass="title-label" style=" -fx-padding: 20;" />
 
   <!-- Buttons -->
   <VBox alignment="CENTER" spacing="30" prefWidth="300">

@@ -23,7 +23,7 @@ public class IngredientTrackerApplication extends Application {
     /** The width of the application window. */
     public static final int WIDTH = 340;
     /** The height of the application window. */
-    public static final int HEIGHT = 450;
+    public static final int HEIGHT = 420;
     private IngredientsDAO ingredientsDAO = new IngredientsDAO();
     private RecipeDAO recipeDAO = new RecipeDAO();
     private UserDAO userDAO = new UserDAO();
@@ -50,7 +50,9 @@ public class IngredientTrackerApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(IngredientTrackerApplication.class.getResource("login.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), WIDTH, HEIGHT);
+        Scene scene = new Scene(fxmlLoader.load(), 340, 230);
+
+
         // Get the LoginController and set the UserDAO
         LoginController loginController = fxmlLoader.getController();
         loginController.setUserDAO(userDAO);
