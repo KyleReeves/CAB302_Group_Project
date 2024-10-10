@@ -5,15 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c49651ca-97f0-401f-bd2b-75ba3774044a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/cab302_project/ShoppingListDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/cab302_project/ShoppingListItem.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database.db" beforeDir="false" afterPath="$PROJECT_DIR$/database.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/cab302_project/IngredientsDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/cab302_project/IngredientsDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/cab302_project/ManageIngredientsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/cab302_project/ManageIngredientsController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/cab302_project/ShoppingListController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/cab302_project/ShoppingListController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/cab302_project/manage-ingredients-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/cab302_project/manage-ingredients-view.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/cab302_project/shopping-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/cab302_project/shopping-view.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/cab302_project/RecipeDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/cab302_project/RecipeDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/cab302_project/RecommendRecipeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/cab302_project/RecommendRecipeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/cab302_project/recommend-recipe-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/cab302_project/recommend-recipe-view.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,23 +27,23 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="Vaishnav" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
-    &quot;lastFilter&quot;: {
+  &quot;lastFilter&quot;: {
     &quot;state&quot;: &quot;OPEN&quot;,
     &quot;assignee&quot;: &quot;idrcmatre&quot;
-    }
-    }</component>
+  }
+}</component>
   <component name="GithubPullRequestsUISettings">{
-    &quot;selectedUrlAndAccountId&quot;: {
+  &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/KyleReeves/CAB302_Group_Project.git&quot;,
-    &quot;accountId&quot;: &quot;0398992f-fb6e-48bc-ae6a-2435ed000351&quot;
-    }
-    }</component>
+    &quot;accountId&quot;: &quot;246e87cf-9350-4d4b-8937-892cb9ce6cae&quot;
+  }
+}</component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
@@ -69,7 +65,7 @@
   "keyToString": {
     "Application.IngredientTrackerApplication.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "Merging master",
+    "git-widget-placeholder": "kylereeves-recomeded-recipies",
     "kotlin-language-version-configured": "true",
     "node.js.selected.package.tslint": "(autodetect)",
     "project.structure.last.edited": "Libraries",

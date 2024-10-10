@@ -26,6 +26,7 @@ public class RecipeDAO {
         }
     }
 
+
     // Create RecipeIngredients table if it doesn't exist
     public void createRecipeIngredientTable() {
         try {
@@ -89,6 +90,26 @@ public class RecipeDAO {
                 System.out.println("Retrieved recipe: ID = " + id + ", Name = " + name);
             }
         } catch (SQLException ex) {
+            System.err.println("Error getting all recipes: " + ex.getMessage());
+        }
+        return recipes;
+    }
+
+    // gets all recipes where all ingredients are in stock
+    public List<Recipe> recomendedRecipes(){
+        List<Recipe> recipes = new ArrayList<>();
+        try{
+            Statement getAll = connection.createStatement();
+            ResultSet rs = getAll.executeQuery("SELECT * FROM Recipe WHERE Recipe.id !=(SELECT DISTINCT Recipeid FROM RecipeIngredients LEFT JOIN Ingredients ON RecipeIngredients.Ingredientid = Ingredients.id WHERE (RecipeIngredients.ingredientUsage > Ingredients.Quantity))");
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("Recipe");
+                Recipe recipe = new Recipe(id, name);
+                recipes.add(recipe);
+                System.out.println("Retrieved recipe: ID = " + id + ", Name = " + name);
+            }
+
+        }catch(SQLException ex){
             System.err.println("Error getting all recipes: " + ex.getMessage());
         }
         return recipes;
