@@ -232,7 +232,7 @@ public class IngredientsDAO {
     }
 
     /**
-     * Fetches ingredients that need restocking (current quantity < minimum quantity)
+     * * Fetches ingredients that need restocking (current quantity &lt; minimum quantity)
      *
      * @return A list of ingredients which need restocking
      */

@@ -18,8 +18,11 @@ import java.sql.Connection;
 public class IngredientTrackerApplication extends Application {
 
     // The constants which define the window title and size
+    /** The title of the application window. */
     public static final String TITLE = "Ingredient Tracker";
+    /** The width of the application window. */
     public static final int WIDTH = 340;
+    /** The height of the application window. */
     public static final int HEIGHT = 450;
     private IngredientsDAO ingredientsDAO = new IngredientsDAO();
     private RecipeDAO recipeDAO = new RecipeDAO();
