@@ -32,7 +32,7 @@ public class RecommendRecipeController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         recipeDAO = new RecipeDAO();
         setupRecipesTable();
-        loadRecipes();
+        loadRecommendedRecipes();
     }
 
     private void setupRecipesTable() {
@@ -45,9 +45,9 @@ public class RecommendRecipeController implements Initializable {
         recipesTable.getColumns().addAll(idColumn, nameColumn);
     }
 
-    private void loadRecipes() {
-        List<Recipe> recipes = recipeDAO.getAll();
-        ObservableList<Recipe> observableRecipes = FXCollections.observableArrayList(recipes);
+    private void loadRecommendedRecipes() {
+        List<Recipe> recommendedRecipes = recipeDAO.getRecommendedRecipes();
+        ObservableList<Recipe> observableRecipes = FXCollections.observableArrayList(recommendedRecipes);
         recipesTable.setItems(observableRecipes);
     }
 

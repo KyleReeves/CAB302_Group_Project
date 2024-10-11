@@ -96,21 +96,30 @@ public class RecipeDAO {
     }
 
     // gets all recipes where all ingredients are in stock
-    public List<Recipe> recomendedRecipes(){
+    public List<Recipe> getRecommendedRecipes() {
         List<Recipe> recipes = new ArrayList<>();
-        try{
-            Statement getAll = connection.createStatement();
-            ResultSet rs = getAll.executeQuery("SELECT * FROM Recipe WHERE Recipe.id !=(SELECT DISTINCT Recipeid FROM RecipeIngredients LEFT JOIN Ingredients ON RecipeIngredients.Ingredientid = Ingredients.id WHERE (RecipeIngredients.ingredientUsage > Ingredients.Quantity))");
+        try {
+            String query = "SELECT DISTINCT r.id, r.Recipe " +
+                    "FROM Recipe r " +
+                    "WHERE NOT EXISTS (" +
+                    "    SELECT 1 " +
+                    "    FROM RecipeIngredients ri " +
+                    "    LEFT JOIN Ingredients i ON ri.Ingredientid = i.id " +
+                    "    WHERE ri.Recipeid = r.id AND (ri.ingredientUsage > i.Quantity OR i.Quantity IS NULL)" +
+                    ")";
+
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String name = rs.getString("Recipe");
                 Recipe recipe = new Recipe(id, name);
                 recipes.add(recipe);
-                System.out.println("Retrieved recipe: ID = " + id + ", Name = " + name);
+                System.out.println("Retrieved recommended recipe: ID = " + id + ", Name = " + name);
             }
-
-        }catch(SQLException ex){
-            System.err.println("Error getting all recipes: " + ex.getMessage());
+        } catch (SQLException ex) {
+            System.err.println("Error getting recommended recipes: " + ex.getMessage());
         }
         return recipes;
     }
