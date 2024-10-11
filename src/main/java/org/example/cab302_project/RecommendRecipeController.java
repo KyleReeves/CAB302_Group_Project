@@ -46,9 +46,14 @@ public class RecommendRecipeController implements Initializable {
     }
 
     private void loadRecommendedRecipes() {
+        System.out.println("Debug: Printing all recipes and ingredients before filtering");
+        recipeDAO.printAllRecipesAndIngredients();
+
         List<Recipe> recommendedRecipes = recipeDAO.getRecommendedRecipes();
         ObservableList<Recipe> observableRecipes = FXCollections.observableArrayList(recommendedRecipes);
         recipesTable.setItems(observableRecipes);
+
+        System.out.println("Debug: Recommended recipes count: " + recommendedRecipes.size());
     }
 
     @FXML

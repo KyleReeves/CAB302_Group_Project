@@ -99,14 +99,13 @@ public class RecipeDAO {
     public List<Recipe> getRecommendedRecipes() {
         List<Recipe> recipes = new ArrayList<>();
         try {
-            String query = "SELECT DISTINCT r.id, r.Recipe " +
+            String query = "SELECT r.id, r.Recipe, " +
+                    "GROUP_CONCAT(ri.Ingredientid || ':' || ri.ingredientUsage || ':' || COALESCE(i.Quantity, 0)) AS ingredients, " +
+                    "SUM(CASE WHEN ri.ingredientUsage > COALESCE(i.Quantity, 0) THEN 1 ELSE 0 END) AS insufficient_ingredients " +
                     "FROM Recipe r " +
-                    "WHERE NOT EXISTS (" +
-                    "    SELECT 1 " +
-                    "    FROM RecipeIngredients ri " +
-                    "    LEFT JOIN Ingredients i ON ri.Ingredientid = i.id " +
-                    "    WHERE ri.Recipeid = r.id AND (ri.ingredientUsage > i.Quantity OR i.Quantity IS NULL)" +
-                    ")";
+                    "LEFT JOIN RecipeIngredients ri ON r.id = ri.Recipeid " +
+                    "LEFT JOIN Ingredients i ON ri.Ingredientid = i.id " +
+                    "GROUP BY r.id";
 
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(query);
@@ -114,14 +113,51 @@ public class RecipeDAO {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String name = rs.getString("Recipe");
-                Recipe recipe = new Recipe(id, name);
-                recipes.add(recipe);
-                System.out.println("Retrieved recommended recipe: ID = " + id + ", Name = " + name);
+                String ingredients = rs.getString("ingredients");
+                int insufficientIngredients = rs.getInt("insufficient_ingredients");
+
+                System.out.println("Recipe: ID = " + id + ", Name = " + name +
+                        ", Ingredients = " + ingredients +
+                        ", Insufficient Ingredients = " + insufficientIngredients);
+
+                if (insufficientIngredients == 0) {
+                    Recipe recipe = new Recipe(id, name);
+                    recipes.add(recipe);
+                    System.out.println("Added to recommended recipes: " + name);
+                } else {
+                    System.out.println("Not recommended due to insufficient ingredients: " + name);
+                }
             }
         } catch (SQLException ex) {
             System.err.println("Error getting recommended recipes: " + ex.getMessage());
+            ex.printStackTrace();
         }
         return recipes;
+    }
+
+    // Debug method to print all recipes and their ingredients
+    public void printAllRecipesAndIngredients() {
+        try {
+            String query = "SELECT r.id, r.Recipe, " +
+                    "GROUP_CONCAT(i.Ingredient || ':' || ri.ingredientUsage || ':' || COALESCE(i.Quantity, 0)) AS ingredients " +
+                    "FROM Recipe r " +
+                    "LEFT JOIN RecipeIngredients ri ON r.id = ri.Recipeid " +
+                    "LEFT JOIN Ingredients i ON ri.Ingredientid = i.id " +
+                    "GROUP BY r.id";
+
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("Recipe");
+                String ingredients = rs.getString("ingredients");
+                System.out.println("Recipe: ID = " + id + ", Name = " + name + ", Ingredients = " + ingredients);
+            }
+        } catch (SQLException ex) {
+            System.err.println("Error printing all recipes and ingredients: " + ex.getMessage());
+            ex.printStackTrace();
+        }
     }
 
     // Insert a new recipe ingredient into the database
