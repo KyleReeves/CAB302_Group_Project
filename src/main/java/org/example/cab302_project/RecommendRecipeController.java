@@ -25,7 +25,8 @@ public class RecommendRecipeController implements Initializable {
 
     @FXML
     private TableView<Recipe> recipesTable;
-
+    @FXML
+    TableColumn<Recipe, String> nameColumn;
     private RecipeDAO recipeDAO;
 
     @Override
@@ -36,13 +37,11 @@ public class RecommendRecipeController implements Initializable {
     }
 
     private void setupRecipesTable() {
-        TableColumn<Recipe, Integer> idColumn = new TableColumn<>("ID");
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
 
-        TableColumn<Recipe, String> nameColumn = new TableColumn<>("Recipe Name");
+        //TableColumn<Recipe, String> nameColumn = new TableColumn<>("Recipe Name");
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
-        recipesTable.getColumns().addAll(idColumn, nameColumn);
+        recipesTable.getColumns().addAll(nameColumn);
     }
 
     private void loadRecommendedRecipes() {
