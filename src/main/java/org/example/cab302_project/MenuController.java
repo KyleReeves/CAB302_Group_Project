@@ -66,7 +66,7 @@ public class MenuController {
     protected void manageIngredientsButton() throws IOException {
         Stage stage = (Stage) manageIngredientsButton.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(IngredientTrackerApplication.class.getResource("manage-ingredients-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), IngredientTrackerApplication.WIDTH, IngredientTrackerApplication.HEIGHT);
+        Scene scene = new Scene(fxmlLoader.load(), 600, IngredientTrackerApplication.HEIGHT);
         stage.setTitle("Manage Ingredients");
 
         // Add stylesheet to the new scene
@@ -84,7 +84,7 @@ public class MenuController {
     protected void ShoppingListButton() throws IOException {
         Stage stage = (Stage) shoppingButton.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(IngredientTrackerApplication.class.getResource("shopping-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), IngredientTrackerApplication.WIDTH, IngredientTrackerApplication.HEIGHT);
+        Scene scene = new Scene(fxmlLoader.load(), 520, 450);
         stage.setTitle("Shopping List");
 
 
@@ -103,7 +103,7 @@ public class MenuController {
     protected void manageRecipesButton() throws IOException {
         Stage stage = (Stage) manageRecipesButton.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(IngredientTrackerApplication.class.getResource("manage-recipes.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 650, 420);
+        Scene scene = new Scene(fxmlLoader.load(), 560, 420);
         stage.setTitle("Manage Recipes");
 
         // Add stylesheet to the new scene
@@ -142,9 +142,8 @@ public class MenuController {
                 // Get the LoginController and set the UserDAO
                 LoginController loginController = loader.getController();
                 loginController.setUserDAO(this.userDAO);
-
                 // Set the login scene
-                Scene loginScene = new Scene(loginView, IngredientTrackerApplication.WIDTH, IngredientTrackerApplication.HEIGHT);
+                Scene loginScene = new Scene(loginView, 340, 230);
 
                 // Apply the CSS
                 loginScene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/org/example/cab302_project/FormStyles.css")).toExternalForm());
