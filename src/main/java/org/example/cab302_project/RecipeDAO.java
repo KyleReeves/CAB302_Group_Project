@@ -4,14 +4,30 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Data Access Object class for managing recipes and recipe ingredients in the database
+ * Provides CRUD methods to insert, retrieve, update and delete recipes and their associated ingredients
+ */
 public class RecipeDAO {
     private Connection connection;
 
+
+    /**
+     * Constructs RecipeDAO and intializes the database connection
+     */
     public RecipeDAO() {
-        connection = DatabaseConnection.getInstance();
+        try {
+            connection = DatabaseConnection.getInstance();
+        } catch (SQLException e) {
+            System.err.println("Error establishing database connection in UserDAO: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
-    // Create Recipe table if it doesn't exist
+    /**
+     *  Create Recipe table if it doesn't exist yet
+     *
+     */
     public void createRecipeTable() {
         try {
             Statement createTable = connection.createStatement();
@@ -26,6 +42,10 @@ public class RecipeDAO {
         }
     }
 
+    /**
+     * Create the RecipeIngredients table if it doesn't exist yet
+     *
+     */
 
     // Create RecipeIngredients table if it doesn't exist
     public void createRecipeIngredientTable() {
@@ -46,7 +66,12 @@ public class RecipeDAO {
         }
     }
 
-    // Insert a new recipe into the database
+    /**
+     * Inserts a new recipe into the database
+     *
+     * @param recipe The recipe object which gets used/inserted
+     * @return the generated ID of the newly inserted recipe, or -1 if it failed to do so
+     */
     public int InsertRecipe(Recipe recipe) {
         try {
             PreparedStatement insertRecipe = connection.prepareStatement(
@@ -75,7 +100,11 @@ public class RecipeDAO {
         return -1;
     }
 
-    // Retrieve all recipes from the database
+    /**
+     * Retrieve all recipes from the database
+     *
+     * @return a list of all the recipes in the database
+     */
     public List<Recipe> getAll() {
         List<Recipe> recipes = new ArrayList<>();
         try {
@@ -95,6 +124,11 @@ public class RecipeDAO {
         return recipes;
     }
 
+    /**
+     * Inserts a new recipe ingredient into the database
+     *
+     * @param ingredient the RecipieIngredients object containing the ingredient to be inserted
+     */
     // gets all recipes where all ingredients are in stock
     public List<Recipe> getRecommendedRecipes() {
         List<Recipe> recipes = new ArrayList<>();
@@ -181,7 +215,14 @@ public class RecipeDAO {
         }
     }
 
-    // Retrieve all ingredients for a specific recipe
+    //
+
+    /**
+     * Retrieves all ingredients for a specific recipe
+     *
+     * @param recipeId the ID of the recipe
+     * @return a list of RecipieIngredients objects representing the ingredients of the recipe
+     */
     public List<RecipieIngredients> getIngredientsForRecipe(int recipeId) {
         List<RecipieIngredients> ingredients = new ArrayList<>();
         try {
@@ -218,7 +259,12 @@ public class RecipeDAO {
         return ingredients;
     }
 
-    // Delete a recipe from the database
+    /**
+     * Delete a recipe from the database by its ID
+     *
+     * @param recipe the recipe object to be deleted
+     * @return true if the recipe was deleted, otherwise false
+     */
     public boolean deleteRecipe(Recipe recipe) {
         try {
             connection.setAutoCommit(false);
@@ -251,7 +297,11 @@ public class RecipeDAO {
         }
     }
 
-    // Delete a recipe ingredient from the database
+    /**
+     * Delete a recipe ingredient from the database
+     *
+     * @param Ingredient the recipieIngredients object which is to be deleted
+     */
     public void deleteRecipeIngredient(RecipieIngredients Ingredient) {
         try {
             PreparedStatement statement = connection.prepareStatement("DELETE FROM RecipeIngredients WHERE id = ?");
@@ -262,7 +312,14 @@ public class RecipeDAO {
         }
     }
 
-    // Update a recipe ingredient in the database
+    //
+
+    /**
+     * Updates a recipe's ingredient in the database
+     *
+     * @param ingredient the RecipieIngredients object contained the updated ingredient data
+     * @return true if the ingredient can be updated, or false otherwise
+     */
     public boolean updateRecipeIngredient(RecipieIngredients ingredient) {
         try {
             PreparedStatement statement = connection.prepareStatement(

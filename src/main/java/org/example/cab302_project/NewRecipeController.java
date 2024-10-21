@@ -16,6 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+
+/**
+ * Controller Class which handles the creation of a new recipe which provides CRUD methods to add,
+ * edit and delete ingredients within a recipe
+ */
 public class NewRecipeController {
 
     @FXML
@@ -47,11 +52,18 @@ public class NewRecipeController {
     private RecipeDAO recipeDAO;
     private IngredientsDAO ingredientsDAO;
 
+    /**
+     * Constructor for NewRecipe Controller Which intializes the IngredientsDAO for managing recipes and ingredients
+     */
     public NewRecipeController() {
         recipeDAO = new RecipeDAO();
         ingredientsDAO = new IngredientsDAO();
     }
 
+    /**
+     * Intializes the controller by setting up combo boxes for ingredients and quantities.
+     * Also sets up the ingredient list view, and loads all available ingredients from the database
+     */
     @FXML
     public void initialize() {
         quantityComboBox.setItems(FXCollections.observableArrayList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"));
@@ -61,13 +73,19 @@ public class NewRecipeController {
         loadIngredients();
     }
 
-    // Load all ingredients into the ingredient combo box
+    /**
+     * Load all ingredients into the ingredient combo box
+     */
     private void loadIngredients() {
         List<Ingredient> allIngredients = ingredientsDAO.getAll();
         ingredientComboBox.setItems(FXCollections.observableArrayList(allIngredients));
     }
 
-    // Set up the ingredient list view with custom cell factory
+    //
+
+    /**
+     * Set up the ingredient list view with custom cell factory for displaying ingredients with an edit and delete button
+     */
     private void setupIngredientListView() {
         ingredientList.setCellFactory(new Callback<ListView<RecipieIngredients>, ListCell<RecipieIngredients>>() {
             @Override
@@ -108,7 +126,10 @@ public class NewRecipeController {
         });
     }
 
-    // Handle adding a new ingredient to the recipe
+    /**
+     * Handles adding a new ingredient to the recipe
+     * @param actionEvent the action event which is triggered when the "Add ingredient" button is clicked
+     */
     @FXML
     public void handleAddIngredientClick(ActionEvent actionEvent) {
         Ingredient selectedIngredient = ingredientComboBox.getValue();
@@ -122,7 +143,11 @@ public class NewRecipeController {
         }
     }
 
-    // Handle updating an existing ingredient in the recipe
+    /**
+     * Handle updating an existing ingredient in a recipe
+     *
+     * @param actionEvent the action event which is triggered when the "Update ingredient" button is clicked
+     */
     @FXML
     public void handleUpdateIngredientClick(ActionEvent actionEvent) {
         Ingredient updatedIngredient = ingredientComboBox.getValue();
@@ -142,7 +167,15 @@ public class NewRecipeController {
         }
     }
 
-    // Handle creating a new recipe
+    //
+
+    /**
+     * Handles creating a new recipe by saving the recipe and its ingredients to the database
+     *
+     * @param actionEvent the action event which is triggered when the "create recipe" button is clicked
+     *
+     * @throws IOException handles errors related to loading the recipe management view
+     */
     public void handleCreateRecipeClick(ActionEvent actionEvent) throws IOException {
         String recipeText = recipeName.getText();
 
@@ -177,6 +210,12 @@ public class NewRecipeController {
     }
 
     // Handle back button click
+
+    /**
+     * handles the back button functionality, allowing users to go back a page
+     *
+     * @throws IOException handles errors loading the recipe management view
+     */
     @FXML
     protected void backButton() throws IOException {
         Stage stage = (Stage) backButton.getScene().getWindow();

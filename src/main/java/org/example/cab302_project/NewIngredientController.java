@@ -10,6 +10,11 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * Controller class for handling the logic relating to the addition of new ingredients in the ingredient tracker application
+ * This class interacts with the IngredientsDAO for database operations, and updates the parent controllers when a new ingredient
+ * is added
+ */
 public class NewIngredientController {
 
     @FXML
@@ -34,11 +39,19 @@ public class NewIngredientController {
     private ManageIngredientsController manageIngredientsController;
     private ManageRecipesController manageRecipesController;
 
+    /**
+     * A constructor which initializes the ingredientsDAO for managing database operations relating to ingredients
+     */
     public NewIngredientController() {
         ingredientsDAO = new IngredientsDAO();
     }
 
-    // Sets up input validation for quantity fields
+    //
+
+    /**
+     * Initializes the controller by setting up input validation for the quantity fields by ensuring
+     * minimum quantity fields only accept numeric inputs
+     */
     @FXML
     public void initialize() {
         // Existing input validation code
@@ -55,16 +68,29 @@ public class NewIngredientController {
         });
     }
 
-    // Set the parent controllers
+
+    /**
+     * Set the parent controllers
+     *
+     * @param controller the instance of ManageIngredientsController, setting it as the parent controller
+     */
     public void setManageIngredientsController(ManageIngredientsController controller) {
         this.manageIngredientsController = controller;
     }
-    //Set the parent controllers
+
+    /**
+     * Set the parent controllers
+     *
+     * @param controller the instance of ManageRecipesController, setting it as the parent controller
+     */
     public void setManageRecipesController(ManageRecipesController controller) {
         this.manageRecipesController = controller;
     }
 
-    // Handles the logic for adding a new ingredient
+    /**
+     * Handles the logic for adding a new ingredient in the database
+     *
+     */
     @FXML
     public void addIngredient() {
         String ingredientNameValue = ingredientName.getText().trim();
@@ -107,7 +133,13 @@ public class NewIngredientController {
         }
     }
 
-    // Displays alert messages to the user
+    /**
+     * Displays alert messages to the user
+     *
+     * @param alertType The type of alter
+     * @param title the title of the alert
+     * @param content the message content for the alter
+     */
     private void showAlert(Alert.AlertType alertType, String title, String content) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
@@ -116,13 +148,18 @@ public class NewIngredientController {
         alert.showAndWait();
     }
 
-    // Handle closing the add ingredient window
+    /**
+     * handles what the backbutton should do, in this case closes the window
+     *
+     */
     @FXML
     protected void backButton() {
         closeWindow();
     }
 
-    // Handle closing the add ingredient window
+    /**
+     * Handle closing the add ingredient window
+     */
     private void closeWindow() {
         Stage stage = (Stage) createButton.getScene().getWindow();
         stage.close();

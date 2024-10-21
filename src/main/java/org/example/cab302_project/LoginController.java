@@ -12,6 +12,11 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * Controller class for handling the login and registration logic in the Ingredient Tracker Application
+ * Interacts with UserDAO to authenticate users and register new users
+ * Manages the navigation to the menu view after a login is successful
+ */
 public class LoginController {
     @FXML
     public TextField usernameField;
@@ -22,10 +27,21 @@ public class LoginController {
 
     private UserDAO userDAO;
 
+
+    /**
+     * Sets the UserDAO for this controller. Injects the UserDAO dependency from the main application
+     *
+     * @param userDAO the UserDAO object which handles user related database operations
+     */
     public void setUserDAO(UserDAO userDAO) {
         this.userDAO = userDAO;
     }
 
+    /**
+     * Handles the login Process when the enters and submits their username and password
+     * Checks if UserDAO is inialized, then attemts to authenticate the user
+     * If a login is successful, it redirects to the menu view. Otherwise, an error message appears
+     */
     @FXML
     public void handleLogin() {
         if (userDAO == null) {
@@ -44,6 +60,11 @@ public class LoginController {
         }
     }
 
+    /**
+     * Handles the registration process when a user submits their desired username and password
+     * attempts to register the user, and if successful, Displays a success message, otherwise displays an
+     * error message
+     */
     @FXML
     private void handleRegister() {
         if (userDAO == null) {
@@ -60,8 +81,11 @@ public class LoginController {
         }
     }
 
-
-
+    /**
+     * Redirects users to the menu view once a login is successful
+     * It loads the menu view from the FXML file, and sets up the menuController
+     * while applying the appropriate stylesheet
+     */
     private void navigateToMenuView() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/cab302_project/menu-view.fxml"));

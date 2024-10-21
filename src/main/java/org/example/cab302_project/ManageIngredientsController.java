@@ -16,6 +16,11 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * The Controller class responsible for the logic related to managing ingredients in the Ingredient Tracker Applcation
+ * Provides CRUD functionality for the creating,reading, editing, and deleting ingredients.
+ * Interacts with the IngredientsDAO database.
+ */
 public class ManageIngredientsController {
 
     public VBox quickAccessSection;
@@ -60,7 +65,10 @@ public class ManageIngredientsController {
         ingredientsDAO = new IngredientsDAO();
     }
 
-    // Initialize method: Set up table columns and load data
+    /**
+     * Sets up table columns, and loads data
+     *
+     */
     @FXML
     public void initialize() {
         setupTableColumns();
@@ -69,12 +77,17 @@ public class ManageIngredientsController {
         setupButtonDisabling();
     }
 
-    // Set up table columns with appropriate cell value factories
+    /**
+     * Set up the table columns with appropriate cell value factories which display ingredient information
+     */
     private void setupTableColumns() {
         ingredientColumn.setCellValueFactory(new PropertyValueFactory<>("ingredient"));
         quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
     }
 
+    /**
+     * Configures the button disabling logic, based on if an ingredient is selected or not
+     */
     private void setupButtonDisabling() {
         plusButton.setDisable(true);
         minusButton.setDisable(true);
@@ -86,7 +99,9 @@ public class ManageIngredientsController {
         });
     }
 
-    // Load all ingredients from the database and populate the table
+    /**
+     * Load all ingredients from the database, and populates the table
+     */
     public void loadIngredients() {
         try {
             ingredientList.clear();
@@ -102,7 +117,9 @@ public class ManageIngredientsController {
         }
     }
 
-    // Method to dynamically load Quick Access items
+    /**
+     * Method to dynamically load Quick Access items
+     */
     public void loadQuickAccessIngredients() {
         VBox quickAccessVBox = new VBox(10);
         List<Ingredient> quickAccessIngredients = ingredientsDAO.getQuickAccessIngredients();
@@ -135,7 +152,11 @@ public class ManageIngredientsController {
         quickAccessSection.getChildren().setAll(quickAccessVBox); // Add to section dynamically
     }
 
-    // Handle the adding of a new ingredient
+    /**
+     * Handle the addition of ingredients
+     *
+     * @throws IOException handles errors when loading new ingredients view
+     */
     @FXML
     protected void addIngredientButton() throws IOException {
         FXMLLoader loader = new FXMLLoader(IngredientTrackerApplication.class.getResource("new-ingredient-view.fxml"));
@@ -155,7 +176,10 @@ public class ManageIngredientsController {
         loadQuickAccessIngredients();
     }
 
-    // Handle the editing of a selected ingredient
+    /**
+     * Handles editing a selected ingredient from the table
+     * Opens a form to edit the ingredient, then reloads table and quick access when its closed
+     */
     @FXML
     private void handleEditIngredient() {
         Ingredient selectedIngredient = ingredientsTable.getSelectionModel().getSelectedItem();
@@ -181,7 +205,14 @@ public class ManageIngredientsController {
         }
     }
 
-    // Update the quantity of an ingredient
+    //
+
+    /**
+     * Updates the quantity of an ingredient
+     *
+     * @param ingredient the ingredient which will be updated
+     * @param delta the amount which the quantity will change by
+     */
     private void updateIngredientQuantity(Ingredient ingredient, int delta) {
 
         int newQuantity = ingredient.getQuantity() + delta;
@@ -196,7 +227,11 @@ public class ManageIngredientsController {
         updateTableView(ingredient);
     }
 
-    // Update the table view for a specific ingredient
+    /**
+     * Updates the table to show the updated quantity of the ingredient
+     *
+     * @param updatedIngredient the ingredient with updated data
+     */
     private void updateTableView(Ingredient updatedIngredient) {
 
         for (Ingredient ingredient : ingredientList) {
@@ -209,7 +244,10 @@ public class ManageIngredientsController {
         ingredientsTable.refresh();
     }
 
-    // Handle the deletion of a selected ingredient
+    /**
+     * Handles the deletion of the selected ingredient from the table
+     * Gives the user a confirmation prompt before it gets deleted
+     */
     @FXML
     protected void handleDeleteSelected() {
         Ingredient selectedIngredient = ingredientsTable.getSelectionModel().getSelectedItem();
@@ -237,16 +275,27 @@ public class ManageIngredientsController {
         }
     }
 
+    /**
+     * Increments the quantity of the selected ingredient by 1
+     */
     @FXML
     private void handlePlusButton() {
         updateSelectedIngredientQuantity(1);
     }
 
+    /**
+     * Decrements the quantity of the selected ingredient by 1
+     */
     @FXML
     private void handleMinusButton() {
         updateSelectedIngredientQuantity(-1);
     }
 
+    /**
+     * Updates the quantity of the selected ingredient by the specified delta
+     *
+     * @param delta the amount to change the quantity by
+     */
     private void updateSelectedIngredientQuantity(int delta) {
         Ingredient selectedIngredient = ingredientsTable.getSelectionModel().getSelectedItem();
         if (selectedIngredient != null) {
@@ -258,7 +307,12 @@ public class ManageIngredientsController {
         }
     }
 
-    // Display information message
+    /**
+     * displays the information in a pop-up alert
+     *
+     * @param title title of pop up
+     * @param message message in pop up
+     */
     private void showInfo(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
@@ -267,7 +321,11 @@ public class ManageIngredientsController {
         alert.showAndWait();
     }
 
-    // Handle back button click
+    /**
+     * Handles going back to the previous page when the back button is clicked, ensuring title and formatting remain consistent
+     *
+     * @throws IOException handles errors when loading views from file
+     */
     @FXML
     protected void backButton() throws IOException {
         Stage stage = (Stage) backButton.getScene().getWindow();
@@ -280,7 +338,12 @@ public class ManageIngredientsController {
         stage.setScene(scene);
     }
 
-    // Show error message
+    /**
+     * Displays an error message in a pop-up alert
+     *
+     * @param title title of pop up
+     * @param message message in pop up
+     */
     private void showError(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
@@ -289,13 +352,18 @@ public class ManageIngredientsController {
         alert.showAndWait();
     }
 
+    /**
+     * Loads all ingredients from the database and refreshes the table view
+     */
     private void loadAllIngredients() {
         ingredientList.clear();
         ingredientList.addAll(ingredientsDAO.getAll());
         ingredientsTable.refresh();
     }
 
-    // When the program exits or database operations are completed
+    /**
+     * closes database connection when the program exits or database operations are completed
+     */
     public void closeDatabaseConnection() {
         ingredientsDAO.close();
         System.out.println("Database connection closed.");

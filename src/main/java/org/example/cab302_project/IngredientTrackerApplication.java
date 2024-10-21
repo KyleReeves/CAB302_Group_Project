@@ -6,23 +6,32 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Objects;
 import java.sql.Connection;
 
-//test
+/**
+ * The main application class for the ingredient Tracker application
+ * This class extends the JavaFX Views, and serves as the entry point for the GUI and the program.
+ * It sets up the home page and initializes the necessary DAOs to interact with the database.
+ */
 public class IngredientTrackerApplication extends Application {
 
-    // Constants which will define the window title and size
+    // The constants which define the window title and size
+    /** The title of the application window. */
     public static final String TITLE = "Ingredient Tracker";
+    /** The width of the application window. */
     public static final int WIDTH = 340;
-    public static final int HEIGHT = 450;
+    /** The height of the application window. */
+    public static final int HEIGHT = 420;
     private IngredientsDAO ingredientsDAO = new IngredientsDAO();
     private RecipeDAO recipeDAO = new RecipeDAO();
     private UserDAO userDAO = new UserDAO();
-//    // Background and text colouring constants
-//    public static final String BACKGROUND_STYLING = "-fx-background-color: #2B2B2B;";
-//    public static final String TEXT_STYLING = "-fx-text-fill: white;";
+    private Connection connection;
 
+    /**
+     * Initializes the application by initializing the appropriate DAOs to populate the necessary tables
+     */
     @Override
     public void init() {
         ingredientsDAO.createTable();
@@ -31,36 +40,45 @@ public class IngredientTrackerApplication extends Application {
         userDAO.createUserTable(); //create Tables for Users
     }
 
-
-
+    /**
+     * Starts the JavaFX application and sets the initial GUI/stage
+     * loads the login screen from FXML, sets the scene and intializes functionality from LoginController
+     *
+     * @param stage the primary stage for this application, where the login screen is set
+     * @throws IOException handles errors and exceptions when loading FXML files
+     */
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(IngredientTrackerApplication.class.getResource("login.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), WIDTH, HEIGHT);
+        Scene scene = new Scene(fxmlLoader.load(), 340, 230);
+
+
         // Get the LoginController and set the UserDAO
         LoginController loginController = fxmlLoader.getController();
         loginController.setUserDAO(userDAO);
 
-//        // Apply background color to the root pane
-//        Pane rootPane = (Pane) scene.getRoot();
-//        rootPane.setStyle(BACKGROUND_STYLING); // Set background color
-//
-//        // Apply text color globally
-//        scene.getRoot().lookupAll(".label").forEach(node -> node.setStyle(TEXT_STYLING));
-//        scene.getRoot().lookupAll(".button").forEach(node -> node.setStyle(TEXT_STYLING));
-
-        // Add the stylesheet to the scene
+        // Adding the stylesheet to the scene
         scene.getStylesheets().add(Objects.requireNonNull(IngredientTrackerApplication.class.getResource("FormStyles.css")).toExternalForm());
 
         stage.setTitle(TITLE);
         stage.setScene(scene);
         stage.show();
 
-        Connection connection = DatabaseConnection.getInstance();
+        try {
+            connection = DatabaseConnection.getInstance();
+        } catch (SQLException e) {
+            System.err.println("Error establishing database connection in UserDAO: " + e.getMessage());
+            e.printStackTrace();
+        }
 
 
     }
 
+    /**
+     * The entry point and main method, which launches the JavaFX application
+     *
+     * @param args the command-line arguments (not used)
+     */
     public static void main(String[] args) {
         launch();
     }

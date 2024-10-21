@@ -4,15 +4,38 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-// Constructor: Initialize database connection
+/**
+ * This is a Data Access Object (DAO) class for managing the ingredients in the database and tables
+ * This DAO provides crud methods to create read update and delete from the database
+ *
+ */
 public class IngredientsDAO {
+
+    /**
+     * Initializes database connection
+     */
     private Connection connection;
 
 
     // Create the Ingredients table if it doesn't exist
+
+    /**
+     * Constructs the IngredientsDAO and initializes the database connection.
+     *
+     */
     public IngredientsDAO() {
-        connection = DatabaseConnection.getInstance();
+        try {
+            connection = DatabaseConnection.getInstance();
+        } catch (SQLException e) {
+            System.err.println("Error establishing database connection in UserDAO: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
+
+    /**
+     * Creates the Ingredients table in the database if it does not already exist.
+     *
+     */
     public void createTable() {
         try {
             Statement createTable = connection.createStatement();
@@ -29,7 +52,12 @@ public class IngredientsDAO {
             System.err.println(ex);
         }
     }
-    // Insert a new ingredient into the database
+
+    /**
+     * Inserts a new ingredient into the database
+     *
+     * @param ingredients The Ingredient object which contains relevant details to be inserted
+     */
     public void Insert(Ingredient ingredients) {
         try {
             PreparedStatement insertIngredient = connection.prepareStatement(
@@ -45,7 +73,11 @@ public class IngredientsDAO {
         }
     }
 
-    // Retrieve all ingredients from the database
+    /**
+     * Retrieves all ingredients from the database
+     *
+     * @return a List of all ingredients in the database
+     */
     public List<Ingredient> getAll() {
         List<Ingredient> ingredients = new ArrayList<>();
         try {
@@ -68,7 +100,11 @@ public class IngredientsDAO {
         return ingredients;
     }
 
-    // Get Ingredients if quick access is true
+    /**
+     * Retrieves Ingredients if quick access is true
+     *
+     * @return a list of ingredients with quick access enabled
+     */
     public List<Ingredient> getQuickAccessIngredients() {
         List<Ingredient> ingredients = new ArrayList<>();
         try {
@@ -89,7 +125,13 @@ public class IngredientsDAO {
         }
         return ingredients;
     }
-    // Retrieve an ingredient by its ID
+
+    /**
+     * Retrieve an ingredient from the database by its ID
+     *
+     * @param id The ID of the ingredient to retrieve
+     * @return the ingredient with the specified ID, or returns null if it is not found
+     */
     public Ingredient getById(int id) {
         try {
             PreparedStatement getingredient = connection.prepareStatement("SELECT * FROM Ingredients WHERE id = ?");
@@ -110,7 +152,12 @@ public class IngredientsDAO {
         return null;
     }
 
-    // Update an existing ingredient in the database
+
+    /**
+     * Update an existing ingredient in the database
+     *
+     * @param ingredient the ingredient object with updated details
+     */
     public void update(Ingredient ingredient) {
         try {
             PreparedStatement statement = connection.prepareStatement(
@@ -131,7 +178,12 @@ public class IngredientsDAO {
         }
     }
 
-    // Check if an ingredient with the given name already exists
+    /**
+     * Checks if an ingredient with the given name already exists
+     *
+     * @param ingredientName The name of the ingredient to check
+     * @return True if the ingredient already exists, otherwise returns a false
+     */
     public boolean ingredientExists(String ingredientName) {
         try {
             PreparedStatement statement = connection.prepareStatement(
@@ -148,7 +200,13 @@ public class IngredientsDAO {
         }
         return false;
     }
-    // Delete an ingredient from the database
+
+    /**
+     * Delete an ingredient from the database
+     *
+     * @param ingredient The name of the ingredient to delete
+     * @return True if the ingredient was deleted, otherwise returns false
+     */
     public boolean delete(Ingredient ingredient) {
         try {
             PreparedStatement statement = connection.prepareStatement("DELETE FROM Ingredients WHERE id = ?");
@@ -162,7 +220,9 @@ public class IngredientsDAO {
         }
     }
 
-    // Close the database connection
+    /**
+     * Closes the database connection
+     */
     public void close() {
         try {
             connection.close();
@@ -171,7 +231,11 @@ public class IngredientsDAO {
         }
     }
 
-    // Fetch ingredients that need restocking (current quantity < minimum quantity)
+    /**
+     * * Fetches ingredients that need restocking (current quantity &lt; minimum quantity)
+     *
+     * @return A list of ingredients which need restocking
+     */
     public List<Ingredient> getIngredientsForRestocking() {
         List<Ingredient> ingredients = new ArrayList<>();
         try {

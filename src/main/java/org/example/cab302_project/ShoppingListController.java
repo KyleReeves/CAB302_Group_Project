@@ -13,6 +13,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * The controller class which contains the logic for managing the shopping list within the ingredient tracker application
+ * This contains CRUD methods to create, read update and delete ingredients in the shopping list and interacts with the database
+ * through the IngredientsDAO and ShoppingListDAO classes
+ */
 public class ShoppingListController {
 
     @FXML private ListView<ShoppingListItem> shoppingListView;
@@ -36,12 +41,21 @@ public class ShoppingListController {
     private ObservableList<ShoppingListItem> shoppingList;
     private String currentListName;
 
+
+    /**
+     * Constructs the ShoppingListController and initializes the DAOS and the list in the view
+     *
+     */
     public ShoppingListController() {
         ingredientsDAO = new IngredientsDAO();
         shoppingListDAO = new ShoppingListDAO();
         shoppingList = FXCollections.observableArrayList();
     }
 
+    /**
+     * Initializes by loading the ingredients while setting up the list view, buttons and delete list buttons
+     *
+     */
     @FXML
     public void initialize() {
         loadAllIngredients();
@@ -52,12 +66,21 @@ public class ShoppingListController {
         deleteListButton.setOnAction(event -> handleDeleteList());
     }
 
+    /**
+     * Loads all the ingredients within the combo box
+     *
+     */
     private void loadAllIngredients() {
         List<Ingredient> allIngredients = ingredientsDAO.getAll();
         ingredientComboBox.setItems(FXCollections.observableArrayList(allIngredients));
         deleteListButton.setDisable(false);
     }
 
+
+    /**
+     * sets up the ListView which will display the shopping list of items which are needed
+     *
+     */
     private void setupListView() {
         shoppingListView.setCellFactory(param -> new ListCell<ShoppingListItem>() {
             @Override
@@ -86,6 +109,10 @@ public class ShoppingListController {
         });
     }
 
+    /**
+     * Sets up the action bvuttons with their own respective event handlers
+     *
+     */
     private void setupButtons() {
         addButton.setOnAction(event -> handleAddItem());
         updateButton.setOnAction(event -> handleUpdateItem());
@@ -104,6 +131,10 @@ public class ShoppingListController {
         });
     }
 
+    /**
+     * Handles adding another item to the shopping list
+     *
+     */
     private void handleAddItem() {
         Ingredient selectedIngredient = ingredientComboBox.getValue();
         String quantityText = quantityField.getText();
@@ -120,6 +151,9 @@ public class ShoppingListController {
         }
     }
 
+    /**
+     * Handles updating the amount of an ingredient within the shopping list
+     */
     private void handleUpdateItem() {
         ShoppingListItem selectedItem = shoppingListView.getSelectionModel().getSelectedItem();
         String quantityText = quantityField.getText();
@@ -130,6 +164,10 @@ public class ShoppingListController {
         }
     }
 
+    /**
+     * Handles deleting an ingredient from the shopping list
+     *
+     */
     private void handleDeleteItem() {
         ShoppingListItem selectedItem = shoppingListView.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
@@ -137,6 +175,10 @@ public class ShoppingListController {
         }
     }
 
+    /**
+     * Generates the shopping list based on the ingredients which will need to be restocked
+     *
+     */
     private void handleGenerateList() {
         shoppingList.clear();
         List<Ingredient> autoList = ingredientsDAO.getIngredientsForRestocking();
@@ -145,6 +187,10 @@ public class ShoppingListController {
         }
     }
 
+    /**
+     * Handles the saving of the current list to the database
+     *
+     */
     private void handleSaveList() {
         if (currentListName == null) {
             TextInputDialog dialog = new TextInputDialog();
@@ -162,12 +208,21 @@ public class ShoppingListController {
         }
     }
 
+    /**
+     * Saves the shopping list with the given name
+     *
+     */
     private void saveCurrentList() {
         shoppingListDAO.saveShoppingList(currentListName, shoppingList);
         currentListLabel.setText("Current List: " + currentListName);
         showAlert("Save Successful", "The shopping list has been saved as: " + currentListName);
     }
 
+
+    /**
+     * Handles loading another shopping list from the database
+     *
+     */
     private void handleLoadList() {
         List<String> listNames = shoppingListDAO.getShoppingListNames();
         ChoiceDialog<String> dialog = new ChoiceDialog<>(null, listNames);
@@ -185,6 +240,11 @@ public class ShoppingListController {
         }
     }
 
+    /**
+     * Loads the shopping list with the specified name from the database
+     *
+     * @param listName the name of the shopping list
+     */
     private void loadList(String listName) {
         List<ShoppingListItem> loadedList = shoppingListDAO.loadShoppingList(listName);
         shoppingList.clear();
@@ -195,6 +255,9 @@ public class ShoppingListController {
         System.out.println("Loaded list: " + currentListName);
     }
 
+    /**
+     * Creates a new list which starts empty
+     */
     private void newList() {
         shoppingList.clear();
         currentListName = null;
@@ -202,6 +265,10 @@ public class ShoppingListController {
 
     }
 
+    /**
+     * Handles the deletion of the current shopping list from the database
+     *
+     */
     @FXML
     private void handleDeleteList() {
         System.out.println("Delete list button clicked. Current list name: " + currentListName);
@@ -223,6 +290,10 @@ public class ShoppingListController {
         }
     }
 
+
+    /**
+     * Deletes the current shopping list from the database
+     */
     private void deleteCurrentList() {
         System.out.println("Attempting to delete current list: " + currentListName);
         if (currentListName != null && !currentListName.isEmpty()) {
@@ -243,10 +314,23 @@ public class ShoppingListController {
         }
     }
 
+    /**
+     * displays the error message in an alert message
+     *
+     * @param deleteFailed the title of the error dialog
+     * @param s the content
+     */
     private void showError(String deleteFailed, String s) {
     }
 
     // Display information message
+
+    /**
+     * Displays the alert message with the relevant information
+     *
+     * @param title the title of the alert
+     * @param message The content of the alert message
+     */
     private void showInfo(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
@@ -255,6 +339,10 @@ public class ShoppingListController {
         alert.showAndWait();
     }
 
+    /**
+     * Handles the process of purchasing items within the current shopping list
+     *
+     */
     private void handlePurchase() {
         System.out.println("Purchase button clicked. Current list name: " + currentListName);
         if (currentListName == null || currentListName.isEmpty()) {
@@ -278,6 +366,11 @@ public class ShoppingListController {
         }
     }
 
+
+    /**
+     * updates the quantity of the ingredients within the shopping list based on the current quantity of each ingredient
+     *
+     */
     private void updateIngredientQuantities() {
         System.out.println("Updating ingredient quantities");
         for (ShoppingListItem item : shoppingList) {
@@ -295,6 +388,12 @@ public class ShoppingListController {
     }
 
 
+    /**
+     * displays an alert message
+     *
+     * @param title the title of the alert message
+     * @param content the content of the alert message
+     */
     private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
@@ -303,6 +402,11 @@ public class ShoppingListController {
         alert.showAndWait();
     }
 
+    /**
+     * handles going back to the previous page/view
+     *
+     * @throws IOException handles errors related with loading the new view
+     */
     @FXML
     protected void backButton() throws IOException {
         Stage stage = (Stage) backButton.getScene().getWindow();

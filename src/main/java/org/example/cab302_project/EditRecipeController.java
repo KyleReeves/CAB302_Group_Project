@@ -14,6 +14,13 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * A Controller class for the Edit recipe View
+ * This class handles the logic for the interactions between the recipe ingredients, allowing
+ * users to add, update and remove ingredients from a recipe. It also performs
+ * database operations with RecipeDAO and IngredientsDAO
+ *
+ */
 public class EditRecipeController {
     @FXML
     private ListView<RecipieIngredients> ingredientList;
@@ -43,13 +50,19 @@ public class EditRecipeController {
     private RecipeDAO recipeDAO;
     private IngredientsDAO ingredientsDAO;
 
-    // Constructor: Initialize DAOs
+    /**
+     * Contructor which initializes both the RecipeDAO and IngredientsDAO objects.
+     */
     public EditRecipeController() {
         recipeDAO = new RecipeDAO();
         ingredientsDAO = new IngredientsDAO();
     }
 
-    // Set the recipe to be edited and populate UI
+    /**
+     * Sets the recipe to be editing and populates the GUI with its data
+     *
+     * @param recipe The recipe object to be edited
+     */
     public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
         recipeName.setText(recipe.getName());
@@ -57,7 +70,10 @@ public class EditRecipeController {
         setupIngredientListView();
     }
 
-    // Initialize method: Set up UI components and load data
+    /**
+     *  Initializes UI components such as the ComboBox for ingredients and quantity,
+     *  loading the data for the Ingredients
+     */
     @FXML
     public void initialize() {
         quantityComboBox.setItems(FXCollections.observableArrayList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"));
@@ -65,20 +81,28 @@ public class EditRecipeController {
         setupIngredientListView();
     }
 
-    // Load all ingredients into the ingredient combo box
+    /**
+     * Loads all ingredients for the current recipe and displays them within the list to be viewed
+     */
     private void loadIngredients() {
         List<Ingredient> allIngredients = ingredientsDAO.getAll();
         ingredientComboBox.setItems(FXCollections.observableArrayList(allIngredients));
     }
 
-    // Load ingredients for the current recipe
+    /**
+     * Load Ingredients for the current recipe and displays them within the list
+     *
+     */
     private void loadRecipeIngredients() {
         List<RecipieIngredients> recipeIngredients = recipeDAO.getIngredientsForRecipe(recipe.getId());
         ingredientList.setItems(FXCollections.observableArrayList(recipeIngredients));
         System.out.println("Loaded " + recipeIngredients.size() + " ingredients for recipe: " + recipe.getName());
     }
 
-    // Set up the ingredient list view with custom cell factory
+    /**
+     * Sets up the ingredient list view with custom edit and delete buttons to delete a single ingredient within the list
+     *
+     */
     private void setupIngredientListView() {
         ingredientList.setCellFactory(new Callback<ListView<RecipieIngredients>, ListCell<RecipieIngredients>>() {
             @Override
@@ -120,7 +144,11 @@ public class EditRecipeController {
         });
     }
 
-    // Handle adding a new ingredient to the recipe
+    /**
+     * Handles adding a new Ingredient to the recipe
+     *
+     * @param event The action event which is triggered when add button is clicked
+     */
     @FXML
     public void handleAddIngredient(ActionEvent event) {
         Ingredient selectedIngredient = ingredientComboBox.getValue();
@@ -135,7 +163,12 @@ public class EditRecipeController {
         }
     }
 
-    // Handle saving the edited recipe
+    /**
+     * Handles saving the edited recipe
+     *
+     * @param event the action event triggered when the save button is clicked
+     * @throws IOException handles issues present when loading a new scene
+     */
     @FXML
     public void handleSaveRecipe(ActionEvent event) throws IOException {
         recipe.setName(recipeName.getText());
@@ -150,7 +183,11 @@ public class EditRecipeController {
         stage.show();
     }
 
-    // Handle updating an existing ingredient in the recipe
+    /**
+     * Handles updating an existing ingredient in the recipe
+     *
+     * @param actionEvent the action event triggered when the update ingredient is clicked
+     */
     public void handleUpdateIngredient(ActionEvent actionEvent) {
         Ingredient updatedIngredient = ingredientComboBox.getValue();
         String updatedQuantity = quantityComboBox.getValue();
@@ -178,7 +215,11 @@ public class EditRecipeController {
         }
     }
 
-    // Handle back button click
+    /**
+     * Handles the back button click, returning the user to the previous screen
+     *
+     * @throws IOException handles issues present with loading previous view
+     */
     @FXML
     protected void backButton() throws IOException {
         Stage stage = (Stage) backButton.getScene().getWindow();

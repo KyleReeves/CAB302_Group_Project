@@ -7,17 +7,31 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * Second set of Unit tests for testing the functionality of RecipeDAO and IngredientDAO classes
+ * Ensures correct database operations such as insertion, deletion and linking recipes and ingredients
+ */
 class RecipeDAOTest2 {
     private static Connection testConnection;
     private RecipeDAO recipeDAO;
     private IngredientsDAO ingredientsDAO;
 
+    /**
+     * Initializes a test database connection with an instance for testing
+     *
+     * @throws SQLException handles if the test connection cannot be established
+     */
     @BeforeAll
     static void setUpClass() throws SQLException {
         testConnection = DriverManager.getConnection("jdbc:sqlite:test_database.db");
         DatabaseConnection.setTestInstance(testConnection);
     }
 
+    /**
+     * Sets up the RecipeDAO and IngredientsDAO instances and creates the necessary tables before each test
+     *
+     * @throws SQLException handles errors which occur during the creation of a table
+     */
     @BeforeEach
     void setUp() throws SQLException {
         recipeDAO = new RecipeDAO();
@@ -28,22 +42,39 @@ class RecipeDAOTest2 {
         clearAllTables();
     }
 
+    /**
+     * Clears all tables after each test to ensure they're fresh
+     *
+     * @throws SQLException handles errors which occur during the creation of a table
+     */
     @AfterEach
     void tearDown() throws SQLException {
         clearAllTables();
     }
 
+    /**
+     * Closes the test database after tests are executed
+     * @throws SQLException handles errors which occur during the creation of a table
+     */
     @AfterAll
     static void tearDownClass() throws SQLException {
         testConnection.close();
     }
 
+    /**
+     *  Clears data from Recipe, RecipeIngredients and Ingredients tables
+     *
+     * @throws SQLException handles errors which occur during the creation of a table
+     */
     private void clearAllTables() throws SQLException {
         testConnection.createStatement().execute("DELETE FROM Recipe");
         testConnection.createStatement().execute("DELETE FROM RecipeIngredients");
         testConnection.createStatement().execute("DELETE FROM Ingredients");
     }
 
+    /**
+     * Tests to verify the insertion of a recipe into the database
+     */
     @Test
     void testInsertRecipe() {
         Recipe recipe = new Recipe("Spaghetti Carbonara");
@@ -57,6 +88,10 @@ class RecipeDAOTest2 {
         assertEquals(id, recipes.get(0).getId(), "The ID should match the one returned by InsertRecipe");
     }
 
+    /**
+     * Tests which retrieve all recipes from the database
+     * Ensures that both inserted recipes are correctly retrieved
+     */
     @Test
     void testGetAllRecipes() {
         Recipe recipe1 = new Recipe("Chicken Parmesan");
@@ -70,6 +105,9 @@ class RecipeDAOTest2 {
         assertTrue(recipes.stream().anyMatch(r -> r.getName().equals("Vegetable Stir Fry") && r.getId() == id2), "Should contain Vegetable Stir Fry with correct ID");
     }
 
+    /**
+     * Test which ensures that tables are empty at the start of the testing
+     */
     @Test
     void testDatabaseIsEmptyAtStart() {
         List<Recipe> recipes = recipeDAO.getAll();

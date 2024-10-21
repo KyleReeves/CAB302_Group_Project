@@ -7,17 +7,33 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
 
+
+/**
+ * Unit tests for testing the functionality of RecipeDAO and IngredientDAO classes
+ * Ensures correct database operations such as insertion, deletion and linking recipes and ingredients
+ */
 class RecipeDAOTest {
     private static Connection testConnection;
     private RecipeDAO recipeDAO;
     private IngredientsDAO ingredientsDAO;
 
+
+    /**
+     * Initializes a test database connection with an instance for testing
+     *
+     * @throws SQLException handles if the test connection cannot be established
+     */
     @BeforeAll
     static void setUpClass() throws SQLException {
         testConnection = DriverManager.getConnection("jdbc:sqlite:test_database.db");
         DatabaseConnection.setTestInstance(testConnection);
     }
 
+    /**
+     * Sets up the RecipeDAO and IngredientsDAO instances and creates the necessary tables before each test
+     *
+     * @throws SQLException handles errors which occur during the creation of a table
+     */
     @BeforeEach
     void setUp() throws SQLException {
         recipeDAO = new RecipeDAO();
@@ -28,22 +44,40 @@ class RecipeDAOTest {
         clearAllTables();
     }
 
+    /**
+     * Clears all tables after each test to ensure they're fresh
+     *
+     * @throws SQLException handles errors which occur during the creation of a table
+     */
     @AfterEach
     void tearDown() throws SQLException {
         clearAllTables();
     }
 
+    /**
+     * Closes the test database after tests are executed
+     * @throws SQLException handles errors which occur during the creation of a table
+     */
     @AfterAll
     static void tearDownClass() throws SQLException {
         testConnection.close();
     }
 
+    /**
+     *  Clears data from Recipe, RecipeIngredients and Ingredients tables
+     *
+     * @throws SQLException handles errors which occur during the creation of a table
+     */
     private void clearAllTables() throws SQLException {
         testConnection.createStatement().execute("DELETE FROM Recipe");
         testConnection.createStatement().execute("DELETE FROM RecipeIngredients");
         testConnection.createStatement().execute("DELETE FROM Ingredients");
     }
 
+    /**
+     * Tests to verify that a recipe can be deleted from the database
+     *
+     */
     @Test
     void testDeleteRecipe() {
         Recipe recipe = new Recipe("Chocolate Chip Cookies");
@@ -57,6 +91,10 @@ class RecipeDAOTest {
         assertTrue(recipes.isEmpty(), "No recipes should remain after deletion");
     }
 
+    /**
+     *
+     * Test to verify if an ingredient can be inserted into the database
+     */
     @Test
     void testInsertIngredient() {
         int initialCount = ingredientsDAO.getAll().size();
@@ -75,6 +113,9 @@ class RecipeDAOTest {
         assertTrue(insertedIngredient.isQuick_access(), "Quick access should be true");
     }
 
+    /**
+     * Test which verifies linking a recipe with an ingredient within the RecipeIngredients table
+     */
     @Test
     void testLinkRecipeWithIngredient() {
         Recipe recipe = new Recipe("Margherita Pizza");
@@ -98,6 +139,9 @@ class RecipeDAOTest {
         assertEquals(100, linkedIngredient.getAmount(), "Amount should be 100");
     }
 
+    /**
+     * Test to verify the retrieval of all ingredients for a specific recipe
+     */
     @Test
     void testGetIngredientsForRecipe() {
         Recipe recipe = new Recipe("Caesar Salad");
@@ -123,6 +167,9 @@ class RecipeDAOTest {
                 "Caesar Salad should contain Croutons with amount 50");
     }
 
+    /**
+     * Test which ensures that tables are empty at the start of the testing
+     */
     @Test
     void testDatabaseIsEmptyAtStart() {
         List<Recipe> recipes = recipeDAO.getAll();

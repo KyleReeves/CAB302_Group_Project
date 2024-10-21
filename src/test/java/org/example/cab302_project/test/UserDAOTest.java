@@ -12,10 +12,18 @@ import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for testing the functionality of the UserDAO class
+ * Ensuring that user registration and login behaviour works correctly
+ */
 class UserDAOTest {
 
     private UserDAO userDAO;
 
+    /**
+     * Sets up the test environment by initializing the userDAO instance
+     * also creates user tables within the test database
+     */
     @BeforeEach
     void setUp() {
         userDAO = new UserDAO();
@@ -25,6 +33,10 @@ class UserDAOTest {
         clearTable();
     }
 
+    /**
+     * Helper method which clears a users table in the database to ensure that there isn't any prior to running
+     * tests
+     */
     private void clearTable() {
         try {
             Connection connection = DatabaseConnection.getInstance();
@@ -35,6 +47,10 @@ class UserDAOTest {
         }
     }
 
+    /**
+     * Tests the registration and retrieval of a user from the database, ensuring that a user is able to successfully register
+     * and is able to be retrieved with the correct user and password inputted
+     */
     @Test
     void testRegisterAndGetUser() {
 
@@ -49,6 +65,10 @@ class UserDAOTest {
         assertEquals("testUser", user.getUsername(), "Username should match the registered one");
     }
 
+    /**
+     * Tests the login failure cases if an incorrect password is used
+     * Makes sure that an incorrect password means a user is unable to login
+     */
     @Test
     void testFailedLoginWithWrongPassword() {
 

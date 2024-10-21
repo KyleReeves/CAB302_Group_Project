@@ -4,14 +4,31 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * This Data Access Object class is responsible for managing shopping lists in the database
+ * with CRUD methods to create, read update and delete lists and their ingredients
+ */
 public class ShoppingListDAO {
     private Connection connection;
 
+
+    /**
+     * Constructor which initializes the database connected to create the lists
+     */
     public ShoppingListDAO() {
-        connection = DatabaseConnection.getInstance();
+        try {
+            connection = DatabaseConnection.getInstance();
+        } catch (SQLException e) {
+            System.err.println("Error establishing database connection in UserDAO: " + e.getMessage());
+            e.printStackTrace();
+        }
         createShoppingListTables();
     }
 
+    /**
+     * Creates the tables for storing shopping lists and their ingredients in the database
+     */
     private void createShoppingListTables() {
         try {
             Statement statement = connection.createStatement();
@@ -36,6 +53,13 @@ public class ShoppingListDAO {
         }
     }
 
+    /**
+     * Saves a shopping list and its associated items to the database, ifa list with a given name already exists then
+     * it instead updates the list
+     *
+     * @param listName the name of the shopping list to save
+     * @param shoppingList the list of shoppingListItem objects which need to be saved
+     */
     public void saveShoppingList(String listName, List<ShoppingListItem> shoppingList) {
         try {
             connection.setAutoCommit(false);
@@ -95,6 +119,12 @@ public class ShoppingListDAO {
         }
     }
 
+    /**
+     * Deletes a shopping list and its associated items from the databae
+     *
+     * @param listName the name of the shopping list which will be deleted
+     * @return returns true if the list was deleted successfully, false if it wasn't
+     */
     public boolean deleteShoppingList(String listName) {
         System.out.println("Attempting to delete shopping list: " + listName);
         try {
@@ -155,6 +185,12 @@ public class ShoppingListDAO {
         }
     }
 
+    /**
+     * Loads a shopping list by name and returns the ingredients/items
+     *
+     * @param listName the name of the shopping list
+     * @return a list of the shopping list objects from the shopping list
+     */
     public List<ShoppingListItem> loadShoppingList(String listName) {
         List<ShoppingListItem> shoppingList = new ArrayList<>();
         try {
@@ -185,6 +221,11 @@ public class ShoppingListDAO {
         return shoppingList;
     }
 
+    /**
+     * Retrieves the names of all shopping lists from the database
+     *
+     * @return A list of all shopping list names
+     */
     public List<String> getShoppingListNames() {
         List<String> listNames = new ArrayList<>();
         try {
