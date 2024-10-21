@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -17,6 +18,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class RecommendRecipeController implements Initializable {
 
@@ -25,6 +27,12 @@ public class RecommendRecipeController implements Initializable {
 
     @FXML
     private TableView<Recipe> recipesTable;
+
+    @FXML
+    private TableColumn<Recipe, String> recipeNameColumn;
+
+    @FXML
+    private TableColumn<Recipe, String> ingredientsColumn;
 
     private RecipeDAO recipeDAO;
 
@@ -36,20 +44,24 @@ public class RecommendRecipeController implements Initializable {
     }
 
     private void setupRecipesTable() {
-        TableColumn<Recipe, Integer> idColumn = new TableColumn<>("ID");
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-
-        TableColumn<Recipe, String> nameColumn = new TableColumn<>("Recipe Name");
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-
-        recipesTable.getColumns().addAll(idColumn, nameColumn);
+        recipeNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        ingredientsColumn.setCellValueFactory(cellData -> {
+            Recipe recipe = cellData.getValue();
+            String ingredientsList = recipe.getIngredients().stream()
+                    .map(ri -> ri.getIngredient().getIngredient() + " (" + ri.getAmount() + ")")
+                    .collect(Collectors.joining(", "));
+            return new SimpleStringProperty(ingredientsList);
+        });
     }
 
     private void loadRecommendedRecipes() {
-        System.out.println("Debug: Printing all recipes and ingredients before filtering");
-        recipeDAO.printAllRecipesAndIngredients();
-
         List<Recipe> recommendedRecipes = recipeDAO.getRecommendedRecipes();
+
+        for (Recipe recipe : recommendedRecipes) {
+            List<RecipieIngredients> ingredients = recipeDAO.getIngredientsForRecipe(recipe.getId());
+            recipe.getIngredients().setAll(ingredients);
+        }
+
         ObservableList<Recipe> observableRecipes = FXCollections.observableArrayList(recommendedRecipes);
         recipesTable.setItems(observableRecipes);
 
